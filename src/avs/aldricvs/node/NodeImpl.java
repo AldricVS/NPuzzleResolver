@@ -3,8 +3,11 @@ package avs.aldricvs.node;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import avs.aldricvs.heuristic.HeuristicCalculator;
+import avs.aldricvs.node.state.Direction;
 import avs.aldricvs.node.state.State;
 
 public class NodeImpl implements Node {
@@ -12,7 +15,7 @@ public class NodeImpl implements Node {
 	private State state;
 
 	private int heuristic;
-	
+
 	private HeuristicCalculator heuristicCalculator;
 
 	private Node parent;
@@ -27,7 +30,13 @@ public class NodeImpl implements Node {
 
 	@Override
 	public List<Node> generateChilds() {
-		return Arrays.asList();
+		return Arrays.stream(Direction.values())
+				.map(state::swapBlankBox)
+				.filter(Optional::isPresent) // TODO : is present / get is very ugly
+				.map(Optional::get)
+				.filter(s -> !state.areSameState(s))
+				.map(s -> new NodeImpl(s, heuristicCalculator, this))
+				.collect(Collectors.toList());
 	}
 
 	@Override
@@ -43,5 +52,10 @@ public class NodeImpl implements Node {
 	@Override
 	public Node getParent() {
 		return parent;
+	}
+
+	@Override
+	public boolean isEndState() {
+		return state.isEndState();
 	}
 }

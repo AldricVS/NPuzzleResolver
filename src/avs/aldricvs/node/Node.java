@@ -12,5 +12,7 @@ public interface Node {
 	
 	public Node getParent();
 	
+	public boolean isEndState();
+	
 	public List<Node> generateChilds();
 }

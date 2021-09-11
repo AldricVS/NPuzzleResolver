@@ -13,6 +13,8 @@ public interface State {
 	public int getSize();
 
 	public boolean isBlankBoxPosition(Position position);
+	
+	public boolean isEndState();
 
 	public boolean areSameState(State state);
 
