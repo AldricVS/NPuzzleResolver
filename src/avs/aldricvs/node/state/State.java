@@ -18,7 +18,7 @@ public interface State {
 
 	public boolean areSameState(State state);
 
-	public String getStringRepresentation();
+	public String toStringRepresentation();
 
 	/**
 	 * 

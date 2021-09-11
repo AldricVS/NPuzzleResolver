@@ -3,7 +3,7 @@ package avs.aldricvs.heuristic;
 import avs.aldricvs.node.point.Position;
 import avs.aldricvs.node.state.State;
 
-public class MisplacedBoxesHeuristicCalculator implements HeuristicCalculator {
+public class ManhattanDistanceHeuristicCalculator implements HeuristicCalculator {
 
 	@Override
 	public int calculateHeuristic(State state) {
@@ -26,6 +26,8 @@ public class MisplacedBoxesHeuristicCalculator implements HeuristicCalculator {
 	}
 
 	private Position determineNumberDestination(State state, int num) {
+		// we work from 1, not from 0
+		num--;
 		int size = state.getSize();
 		int row = num / size;
 		int col = num - row * size;

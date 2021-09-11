@@ -2,7 +2,7 @@ package avs.aldricvs.node.state;
 
 public class StateFactory {
 	
-	public static State createState(int[][] content) {
+	public static State create(int[][] content) {
 		return new IntArrayState(content);
 	}
 }

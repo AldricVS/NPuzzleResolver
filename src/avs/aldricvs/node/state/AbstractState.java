@@ -27,6 +27,8 @@ public abstract class AbstractState implements State {
 
 	@Override
 	public boolean areSameState(State state) {
+		if(state == null)
+			return false;
 		int size = state.getSize();
 		for (int row = 0; row < size; row++) {
 			for (int col = 0; col < size; col++) {
@@ -42,14 +44,14 @@ public abstract class AbstractState implements State {
 	}
 
 	@Override
-	public String getStringRepresentation() {
+	public String toStringRepresentation() {
 		int size = this.getSize();
 		StringBuilder stringBuilder = new StringBuilder();
-		for (int col = 0; col < size; col++) {
-			for (int row = 0; row < size; row++) {
+		for (int row = 0; row < size; row++) {
+			for (int col = 0; col < size; col++) {
 				Position position = new Position(row, col);
 				int num = this.getNumberAt(position);
-				stringBuilder.append(num + "");
+				stringBuilder.append(num + " ");
 			}
 			stringBuilder.append(System.lineSeparator());
 		}

@@ -55,7 +55,7 @@ class IntArrayState extends AbstractState {
 		int num = this.getNumberAt(newPos);
 		newState[oldPos.getRow()][oldPos.getCol()] = num;
 		newState[newPos.getRow()][newPos.getCol()] = BLANK_BOX_VALUE;
-		return Optional.of(StateFactory.createState(newState));
+		return Optional.of(StateFactory.create(newState));
 	}
 
 	@Override

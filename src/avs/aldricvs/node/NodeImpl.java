@@ -18,13 +18,14 @@ public class NodeImpl implements Node {
 
 	private HeuristicCalculator heuristicCalculator;
 
+	// null if root
 	private Node parent;
 
 	public NodeImpl(State state, HeuristicCalculator heuristicCalculator, Node parent) {
 		super();
 		this.state = Objects.requireNonNull(state);
 		this.heuristicCalculator = Objects.requireNonNull(heuristicCalculator);
-		this.parent = Objects.requireNonNull(parent);
+		this.parent = parent;
 		this.heuristic = heuristicCalculator.calculateHeuristic(state);
 	}
 
@@ -34,7 +35,7 @@ public class NodeImpl implements Node {
 				.map(state::swapBlankBox)
 				.filter(Optional::isPresent) // TODO : is present / get is very ugly
 				.map(Optional::get)
-				.filter(s -> !state.areSameState(s))
+				.filter(s -> !s.areSameState(parent == null ? null : parent.getState()))
 				.map(s -> new NodeImpl(s, heuristicCalculator, this))
 				.collect(Collectors.toList());
 	}
@@ -50,8 +51,8 @@ public class NodeImpl implements Node {
 	}
 
 	@Override
-	public Node getParent() {
-		return parent;
+	public Optional<Node> getParent() {
+		return Optional.ofNullable(parent);
 	}
 
 	@Override
