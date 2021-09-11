@@ -9,6 +9,10 @@ public interface Node {
 	
 	public State getState();
 	
+	List<Node> findFullPath();
+	
+	public int getLevel();
+	
 	public int getHeuristic();
 	
 	public Optional<Node> getParent();
