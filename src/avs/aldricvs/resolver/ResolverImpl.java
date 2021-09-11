@@ -1,5 +1,6 @@
 package avs.aldricvs.resolver;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -15,6 +16,8 @@ public class ResolverImpl implements Resolver {
 	
 	private Node currentNode;
 	
+	private List<Node> encounteredNodes = new ArrayList<>();
+	
 	private int step = 0;
 	
 //	private HeuristicCalculator heuristicCalculator;
@@ -23,6 +26,7 @@ public class ResolverImpl implements Resolver {
 		super();
 		this.rootNode = new NodeImpl(initialState, heuristicCalculator, null);
 		this.currentNode = this.rootNode;
+		encounteredNodes.add(currentNode);
 //		this.heuristicCalculator = heuristicCalculator;
 	}
 
@@ -36,13 +40,21 @@ public class ResolverImpl implements Resolver {
 		List<Node> childs = currentNode.generateChilds();
 		
 		Node cheapestChild = childs.stream()
+				.filter(this::hasAlreadyEncounteredThisState)
 				.min(heuristicComparator)
 				.orElseThrow(NoNodeFoundException::new);
 		this.currentNode = cheapestChild;
+		encounteredNodes.add(currentNode);
 		step++;
 	}
 	
 	private static final Comparator<Node> heuristicComparator = (n1, n2) -> n1.getHeuristic() - n2.getHeuristic();
+	
+	private boolean hasAlreadyEncounteredThisState(Node child) {
+		return encounteredNodes.stream()
+			.map(Node::getState)
+			.noneMatch(n -> n.areSameState(child.getState()));
+	}
 	
 	@Override
 	public Node getCurrentNode() {
