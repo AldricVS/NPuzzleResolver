@@ -13,29 +13,19 @@ import avs.aldricvs.resolver.exceptions.NoNodeFoundException;
 
 public class ResolverImpl implements Resolver {
 
-	private Node rootNode;
-
-	private Node currentNode;
-
 	private List<Node> openList = new ArrayList<>();
 
 	private List<Node> closedList = new ArrayList<>();
 
-//	private HeuristicCalculator heuristicCalculator;
-
 	public ResolverImpl(State initialState, HeuristicCalculator heuristicCalculator) {
 		super();
-		this.rootNode = new NodeImpl(initialState, heuristicCalculator, null);
-		this.currentNode = this.rootNode;
-		this.openList.add(currentNode);
-//		this.heuristicCalculator = heuristicCalculator;
+		this.openList.add(new NodeImpl(initialState, heuristicCalculator, null));
 	}
 
 	public Optional<Node> findBestPath() {
 		while (!openList.isEmpty()) {
-			System.out.println(openList.size());
 			Node cheapestNode = openList.stream()
-			        .min(heuristicComparator)
+			        .min(Comparator.comparingInt(Node::getHeuristic))
 			        .orElseThrow(RuntimeException::new);
 
 			if (cheapestNode.isEndState()) {
@@ -45,16 +35,14 @@ public class ResolverImpl implements Resolver {
 			openList.remove(cheapestNode);
 			closedList.add(cheapestNode);
 
-			List<Node> childs = cheapestNode.generateChilds();
-			childs.stream()
+			cheapestNode.generateChilds()
+			        .stream()
 			        .filter(this::hasAlreadyEncounteredThisState)
 			        .forEach(openList::add);
 		}
 		// no solution found
 		return Optional.empty();
 	}
-
-	private static final Comparator<Node> heuristicComparator = Comparator.comparingInt(Node::getHeuristic);
 
 	private boolean hasAlreadyEncounteredThisState(Node child) {
 		return closedList.stream()
