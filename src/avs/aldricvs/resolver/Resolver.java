@@ -7,4 +7,6 @@ import avs.aldricvs.node.Node;
 public interface Resolver {
 	
 	Optional<Node> findBestPath();
+	
+	// TODO : isValid
 }
